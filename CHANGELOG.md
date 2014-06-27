@@ -1,7 +1,7 @@
 # Changelog
 
-## v0.2
+### v0.2
 - fix html layout for injected element
 
-## v0.1
+### v0.1
 - initial release
