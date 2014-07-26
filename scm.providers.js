@@ -8,12 +8,13 @@ var SCM_PROVIDERS = {
             /(http|https):\/\/(.*)\.github.com\/([^\/]+)\/*$/i // http://username.github.com/projectname/
         ],
         project_url: '{0}://github.com/{1}/{2}/commits',
-        momento_format: 'MMM DD, YYYY',
+        //momento_format: 'MMM DD, YYYY',
+        momento_format: 'YYYY-MM-DDTHH:mm:ssZ',
 
         last_commit_time_handler: function(html) {
         	return $(
-        		'#js-repo-pjax-container > div.js-navigation-container.js-active-navigation-container > ol:nth-child(2) > li > div > div.authorship > time:first', 
-        		html).text();
+                'div.commit-body > div > time:first',
+                html).attr('datetime');
         }
     },
 
@@ -22,7 +23,7 @@ var SCM_PROVIDERS = {
             /(http|https):\/\/bitbucket.org\/([^\/]+)\/([^\/]+)\/*$/i, // https://bitbucket.org/username/projectname
         ],
         project_url: '{0}://bitbucket.org/{1}/{2}/commits/all',
-        momento_format: 'YYYY-MM-DDTHH:MM:ssZ',
+        momento_format: 'YYYY-MM-DDTHH:mm:ssZ',
 
         last_commit_time_handler: function(html) {
         	return $(
@@ -40,7 +41,7 @@ var SCM_PROVIDERS = {
 
         last_commit_time_handler: function(html) {
         	return $(
-        		'#resultstable > tbody > tr:nth-child(2) > td:nth-child(5)',
+        		'#resultstable > tbody > tr:nth-child(2) > td[title]:first',
         		html).attr('title');
         }
     },

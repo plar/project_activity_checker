@@ -1,7 +1,10 @@
 # Changelog
 
+### v0.3
+- update: new github page structure
+
 ### v0.2
-- fix html layout for injected element
+- bugfix: fix html layout for injected element
 
 ### v0.1
 - initial release
