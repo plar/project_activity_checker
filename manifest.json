@@ -2,7 +2,7 @@
    "manifest_version": 2,
    "name": "Project Activity Checker",
    "description": "Show health status of the projects that are hosted in the public domain near an anchor tag.",
-   "version": "0.3",
+   "version": "0.3.1",
 
    "icons": {
       "16": "img/pac16.png",

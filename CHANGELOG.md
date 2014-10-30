@@ -1,5 +1,8 @@
 # Changelog
 
+### v0.3.1
+- update: new github page structure
+
 ### v0.3
 - update: new github page structure
 

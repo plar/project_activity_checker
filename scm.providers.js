@@ -8,13 +8,11 @@ var SCM_PROVIDERS = {
             /(http|https):\/\/(.*)\.github.com\/([^\/]+)\/*$/i // http://username.github.com/projectname/
         ],
         project_url: '{0}://github.com/{1}/{2}/commits',
-        //momento_format: 'MMM DD, YYYY',
-        momento_format: 'YYYY-MM-DDTHH:mm:ssZ',
+        momento_format: 'MMM DD, YYYY',
 
         last_commit_time_handler: function(html) {
-        	return $(
-                'div.commit-body > div > time:first',
-                html).attr('datetime');
+            var t = $('div.commit-group-title:first', html).text().trim().split("Commits on ");
+            return (t.length == 2) ? t[1] : "";
         }
     },
 
@@ -26,9 +24,7 @@ var SCM_PROVIDERS = {
         momento_format: 'YYYY-MM-DDTHH:mm:ssZ',
 
         last_commit_time_handler: function(html) {
-        	return $(
-        		'#chg_1 > td.date > div > time', 
-        		html).attr('datetime');
+        	return $('#chg_1 > td.date > div > time', html).attr('datetime');
         }
     },
 
@@ -40,9 +36,7 @@ var SCM_PROVIDERS = {
         momento_format: 'ddd MMM DD HH:mm:ss YYYY', // Wed Jun 25 14:20:08 2014
 
         last_commit_time_handler: function(html) {
-        	return $(
-        		'#resultstable > tbody > tr:nth-child(2) > td[title]:first',
-        		html).attr('title');
+        	return $('#resultstable > tbody > tr:nth-child(2) > td[title]:first', html).attr('title');
         }
     },
 
@@ -55,9 +49,7 @@ var SCM_PROVIDERS = {
         momento_format: 'YYYY-MM-DD',
 
         last_commit_time_handler: function(html) {
-        	return $(
-        		'#last-updated > section > time',
-        		html).attr('datetime');
+        	return $('#last-updated > section > time', html).attr('datetime');
         }
     }, 
 
@@ -70,9 +62,7 @@ var SCM_PROVIDERS = {
     	momento_format: 'YYYY-MM-DD HH:mm:ss',
 
     	last_commit_time_handler: function(html) {
-    		return $(
-    			'#branchtable > tbody > tr:nth-child(1) > td:nth-child(4) > span:nth-child(2)',
-    			html).attr('title');
+    		return $('#branchtable > tbody > tr:nth-child(1) > td:nth-child(4) > span:nth-child(2)', html).attr('title');
     	}
 
     }
