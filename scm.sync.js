@@ -1,8 +1,8 @@
 var ScmSync = (function() {
 
-    ScmSync.const = ScmSync.prototype;    
+    ScmSync.const = ScmSync.prototype;
 
-    ScmSync.const.REFRESH_INTERVAL_IN_SECONDS = 24 * /* hours */ 
+    ScmSync.const.REFRESH_INTERVAL_IN_SECONDS = 24 * /* hours */
                                                 60 * /* mins */
                                                 60   /* seconds */; // update one time per 24 hours
 
@@ -16,6 +16,7 @@ var ScmSync = (function() {
                 id: data.id,
                 url: data.url,
                 status: data.status,
+                extraInfo: data.extraInfo,
                 lastCommitTime: data.lastCommitTime
             });
         });
@@ -51,20 +52,37 @@ var ScmSync = (function() {
                     return;
                 }
 
-                var html = $.parseHTML(data);
-                var lastCommitTime = p.last_commit_time_handler($(html));
+                var html = $($.parseHTML(data));
+                var lastCommitTime = p.last_commit_time_handler(html);
+                var extraInfo = p.extra_info_handler(html);
+                if (extraInfo) {
+                    console.log("extraInfo=", extraInfo);
+                } else {
+                    extraInfo = ''
+                }
 
                 localStorage[res.url] = JSON.stringify({
                     'sync-time': Math.floor(Date.now() / 1000),
-                    'status': lastCommitTime
+                    'status': lastCommitTime,
+                    'extraInfo': extraInfo
                 });
 
-                callback({status: 'OK', id: res.id, lastCommitTime: lastCommitTime });
+                callback({
+                    id: res.id,
+                    status: 'OK',
+                    lastCommitTime: lastCommitTime,
+                    extraInfo: extraInfo
+                });
             });
 
         } else {
             var status = JSON.parse(localStorage[res.url]);
-            callback({status: 'OK', id: res.id, lastCommitTime: status['status']});
+            callback({
+                id: res.id,
+                status: 'OK',
+                lastCommitTime: status['status'],
+                extraInfo: status['extraInfo']
+            });
         }
     }
 

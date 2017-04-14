@@ -24,16 +24,22 @@ jQuery.extend({
 if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) { 
+    return this.replace(/{(\d+)}/g, function(match, number) {
       return args[number] !== undefined ? args[number]
                                         : match;
     });
   };
 }
 
+if (!String.prototype.numberWithCommas) {
+  String.prototype.numberWithCommas = function() {
+      return this.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+}
+
 // blacklist
 function checkUrlForBlackListSites(url, blackListSites, complete) {
-    var predicate = function(site) { 
+    var predicate = function(site) {
       return new RegExp(site).test(url);
     };
 

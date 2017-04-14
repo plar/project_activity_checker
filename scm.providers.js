@@ -4,8 +4,9 @@ if (!window.scmph) window.scmph = {count:0}; if (typeof window.scmph["scm.provid
 var SCM_PROVIDERS = {
     'github': {
         rx_urls: [
-            /(http|https):\/\/github.com\/([^\/]+)\/([^\/]+)\/*$/i, // https://github.com/username/projectname
-            /(http|https):\/\/(.*)\.github.com\/([^\/]+)\/*$/i // http://username.github.com/projectname/
+            /(http|https):\/\/github.com\/([^\/]+)\/([^\/]+)\/*.*$/i, // https://github.com/username/projectname
+            /(http|https):\/\/github.com\/([^\/]+)\/([^\/]+)\/*.*$/i, // https://github.com/username/projectname
+            /(http|https):\/\/(.*)\.github.com\/([^\/]+)\/*.*$/i // http://username.github.com/projectname/
         ],
         project_url: '{0}://github.com/{1}/{2}/commits',
         momento_format: 'MMM DD, YYYY',
@@ -13,6 +14,23 @@ var SCM_PROVIDERS = {
         last_commit_time_handler: function(html) {
             var t = $('div.commit-group-title:first', html).text().trim().split("Commits on ");
             return (t.length == 2) ? t[1] : "";
+        },
+
+        extra_info_handler: function(html) {
+            var watch = $('.pagehead-actions > li:nth-child(1) .social-count', html).text().trim().replace(',',''),
+                stars = $('.pagehead-actions > li:nth-child(2) .social-count:first', html).text().trim().replace(',',''),
+                forks = $('.pagehead-actions > li:nth-child(3) .social-count', html).text().trim().replace(',',''),
+                issues = $('.reponav span:nth-child(2) .counter', html).text().trim().replace(',',''),
+                pr = $('.reponav span:nth-child(3) .counter', html).text().trim().replace(',','');
+
+
+            return {
+                watch: watch,
+                stars: stars,
+                forks: forks,
+                issues: issues,
+                pr: pr
+            };
         }
     },
 
@@ -25,6 +43,20 @@ var SCM_PROVIDERS = {
 
         last_commit_time_handler: function(html) {
         	return $('#chg_1 > td.date > div > time', html).attr('datetime');
+        },
+
+        extra_info_handler: function(html) {
+            var watch = $('#followers-dialog-trigger > span', html).text().trim().replace(',',''),
+                forks = $('#forks-dialog-trigger > span', html).text().trim().replace(',',''),
+                issues = $('#issues-count', html).text().trim().replace(',',''),
+                pr = $('#pullrequests-count', html).text().trim().replace(',','');
+
+            return {
+                watch: watch,
+                forks: forks,
+                issues: issues,
+                pr: pr
+            };
         }
     },
 
@@ -37,6 +69,10 @@ var SCM_PROVIDERS = {
 
         last_commit_time_handler: function(html) {
         	return $('#resultstable > tbody > tr:nth-child(2) > td[title]:first', html).attr('title');
+        },
+
+        extra_info_handler: function(html) {
+            return null;
         }
     },
 
@@ -50,8 +86,12 @@ var SCM_PROVIDERS = {
 
         last_commit_time_handler: function(html) {
         	return $('#last-updated > section > time', html).attr('datetime');
+        },
+
+        extra_info_handler: function(html) {
+            return null;
         }
-    }, 
+    },
 
     'launchpad': {
     	rx_urls: [
@@ -63,8 +103,30 @@ var SCM_PROVIDERS = {
 
     	last_commit_time_handler: function(html) {
     		return $('#branchtable > tbody > tr:nth-child(1) > td:nth-child(4) > span:nth-child(2)', html).attr('title');
-    	}
+    	},
 
+        extra_info_handler: function(html) {
+            return null;
+        }
+    },
+
+    // add proxy feature, to request
+    'pypi': {
+        proxy_page: true,
+        rx_urls: [
+            /(http|https):\/\/pypi.python.org\/pypi\/([^\/]+\/*.*)$/i
+        ],
+
+        project_url: '{0}://pypi.python.org/pypi/{1}',
+        momento_format: 'YYYY-MM-DD',
+
+        last_commit_time_handler: function(html) {
+            return $('#content > div.section > table > tbody > tr.odd > td:nth-child(4)', html).text().trim();
+        },
+
+        extra_info_handler: function(html) {
+            return null;
+        }
     }
 }
 

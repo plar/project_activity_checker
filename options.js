@@ -62,6 +62,7 @@ var Options = (function(_super) {
         this.setDefault('show-provider-icon', true);
         this.setDefault('show-provider-last-time-commit', true);
         this.setDefault('show-provider-last-time-commit-as-title', true);
+        this.setDefault('show-provider-extended-status', true);
 
         this.setDefault('blacklist-sites', '["github.com"]');
     }
@@ -74,11 +75,12 @@ var Options = (function(_super) {
         this.set('show-provider-icon', $('#show-provider-icon').is(':checked'));
         this.set('show-provider-last-time-commit', $('#show-provider-last-time-commit').is(':checked'));
         this.set('show-provider-last-time-commit-as-title', $('#show-provider-last-time-commit-as-title').is(':checked'));
+        this.set('show-provider-extended-status', $('#show-provider-extended-status').is(':checked'));
         this.set('refresh-interval', $('#refresh-interval').val());
 
         this.set('blacklist-sites', JSON.stringify(this._cleanRawSites($('#blacklist-sites').val())));
 
-        $('#show-provider-icon, #show-provider-last-time-commit, #show-provider-last-time-commit-as-title, #refresh-interval, #blacklist-sites').prop('disabled', !this.get('checker-mode'));
+        $('#show-provider-icon, #show-provider-last-time-commit, #show-provider-last-time-commit-as-title, #show-provider-extended-status, #refresh-interval, #blacklist-sites').prop('disabled', !this.get('checker-mode'));
     }
 
     Options.prototype._cleanRawSites = function (sites) {
@@ -95,10 +97,11 @@ var Options = (function(_super) {
         $('#show-provider-icon').prop('checked', this.get('show-provider-icon'));
         $('#show-provider-last-time-commit').prop('checked', this.get('show-provider-last-time-commit'));
         $('#show-provider-last-time-commit-as-title').prop('checked', this.get('show-provider-last-time-commit-as-title'));
+        $('#show-provider-extended-status').prop('checked', this.get('show-provider-extended-status'));
         $('#blacklist-sites').val(this.get('blacklist-sites').join('\n'));
         $('#refresh-interval').val(this.get('refresh-interval'));
 
-        $('#show-provider-icon, #show-provider-last-time-commit, #show-provider-last-time-commit-as-title, #refresh-interval, #blacklist-sites').prop('disabled', !this.get('checker-mode'));
+        $('#show-provider-icon, #show-provider-last-time-commit, #show-provider-last-time-commit-as-title, #show-provider-extended-status, #refresh-interval, #blacklist-sites').prop('disabled', !this.get('checker-mode'));
     }
 
     Options.prototype.addBlackListSites = function (sites) {

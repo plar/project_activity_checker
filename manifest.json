@@ -2,7 +2,7 @@
    "manifest_version": 2,
    "name": "Project Activity Checker",
    "description": "Show health status of the projects that are hosted in the public domain near an anchor tag.",
-   "version": "0.3.1",
+   "version": "0.3.2",
 
    "icons": {
       "16": "img/pac16.png",
@@ -13,11 +13,11 @@
    "background": {
       "scripts": [
         "lib/underscore-1.6.0.min.js",
-        "lib/jquery-2.0.3.min.js", 
-        "lib/tracker.js", 
+        "lib/jquery-2.0.3.min.js",
+        "lib/tracker.js",
         "utils.js",
-        "options.js", 
-        "scm.providers.js", 
+        "options.js",
+        "scm.providers.js",
         "scm.sync.js",
         "background.js"
       ]
@@ -26,16 +26,16 @@
    "content_scripts": [
         {
             "run_at": "document_end",
-            "js": [ 
-                "lib/tracker.js", 
+            "js": [
+                "lib/tracker.js",
                 "lib/underscore-1.6.0.min.js",
                 "lib/jquery-2.0.3.min.js",
                 "lib/jquery.nano.js",
                 "lib/moment-2.7.0.min.js",
-                "utils.js", 
-                "options.js", 
-                "scm.providers.js", 
-                "scm.js", 
+                "utils.js",
+                "options.js",
+                "scm.providers.js",
+                "scm.js",
                 "launcher.js"
             ],
             "css": [
@@ -56,7 +56,7 @@
 
     "options_page": "options.html",
 
-    "permissions": [ 
+    "permissions": [
         "tabs",
         "unlimitedStorage",
         "<all_urls>"

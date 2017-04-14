@@ -7,6 +7,7 @@ var Scm = (function() {
         this.optShowIcon = options.get('show-provider-icon');
         this.optShowLastCommitTime = options.get('show-provider-last-time-commit');
         this.optShowLastCommitTimeAsTitle = options.get('show-provider-last-time-commit-as-title');
+        this.optShowExtendedStatus = options.get('show-provider-extended-status');
 
         this.blackListSites = options.get('blacklist-sites');
     }
@@ -39,7 +40,7 @@ var Scm = (function() {
 
             // update icon badge every 50 links
             if (++total % 50 == 0) {
-                self._updateBadge(total);        
+                self._updateBadge(total);
                 lastTotal = total;
             }
         });
@@ -56,8 +57,8 @@ var Scm = (function() {
                 var res = url.match(p.rx_urls[i]);
                 if (res) {
                     return {
-                        id: pid, 
-                        provider: p, 
+                        id: pid,
+                        provider: p,
                         url: url,
                         results: res.slice(1)};
                 }
@@ -82,10 +83,44 @@ var Scm = (function() {
             var t =  response.lastCommitTime ? moment(response.lastCommitTime, res.provider.momento_format).fromNow() : 'n/a';
 
             if (self.optShowIcon || self.optShowLastCommitTime) {
-                $(anchor).after($.nano("<span class='scm-info {provider_id}'>{time}</span>", {
+                var issueIcon = '<svg aria-hidden="true" class="icon" height="14" version="1.1" viewBox="0 0 14 16" width="16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>';
+
+                var context = {
+                    provider_name: response.id,
                     provider_id: self.optShowIcon ? 'scm-icon ' + response.id : '',
                     time: self.optShowLastCommitTime ? t : '',
-                }));
+                }
+
+                var popup = '';
+                if (self.optShowExtendedStatus && _.has(response, 'extraInfo') && response.extraInfo) {
+                    var ei = response.extraInfo;
+                    var potentialPopup = "<div class='scm-popup'>"+
+                            // "<i><span class='scm-icon {provider_name}'></span>{provider_name}</i>"+
+                            "<b>{time}</b>"+
+                            "<hr/>"+
+                            "<ul>";
+
+                    var totalStats = 0;
+                    Object.keys(ei).forEach(function(key) {
+                        if (ei[key]) {
+                            totalStats++;
+                            ei[key] = ei[key].numberWithCommas();
+                            potentialPopup += "<li><div class='"+ key + "'>" + key + ":</div> {" + key + "}</li>";
+                        }
+                    });
+
+                    potentialPopup += "</ul>"+
+                                    "</div>";
+                    if (totalStats > 0) {
+                        popup = potentialPopup;
+                        context = Object.assign(context, ei);
+                    }
+                }
+
+                $(anchor).after($.nano("<span class='scm-info'>"+
+                                       "<span class='{provider_id}'>" + popup + "</span>" +
+                                       "{time}" +
+                                       "</span>", context));
             }
 
             if (self.optShowLastCommitTimeAsTitle) {
